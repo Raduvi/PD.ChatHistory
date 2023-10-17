@@ -103,7 +103,7 @@ namespace PD.ChatHistory.Infrastructure.Seed
                      new ChatRoomEvent().Create(
                        chatroom: defaultChatRoom,
                        chatUser: chatUserBob,
-                       comment: $"{chatUserBob.UserName} comments: \"Hey, Kate - high five?\"",
+                       comment: $"{chatUserBob.UserName} comments: Hey, Kate - high five?",
                        eventType: EventTypes.Comment,
                        createdOnUTC: defaultDateTime.AddMinutes(15),
                        updatedOnUTC: defaultDateTime.AddMinutes(15)
@@ -128,7 +128,7 @@ namespace PD.ChatHistory.Infrastructure.Seed
                     new ChatRoomEvent().Create(
                        chatroom: defaultChatRoom,
                        chatUser: chatUserKate,
-                       comment: $"{chatUserKate.UserName} comments: \"Oh, typical\"",
+                       comment: $"{chatUserKate.UserName} comments: Oh, typical",
                        eventType: EventTypes.Comment,
                        createdOnUTC: defaultDateTime.AddMinutes(20),
                        updatedOnUTC: defaultDateTime.AddMinutes(20)
@@ -152,7 +152,7 @@ namespace PD.ChatHistory.Infrastructure.Seed
                     new ChatRoomEvent().Create(
                        chatroom: defaultChatRoom,
                        chatUser: chatUserBob,
-                       comment: $"{chatUserBob.UserName} comments: \"Anyone here?\"",
+                       comment: $"{chatUserBob.UserName} comments: Anyone here?",
                        eventType: EventTypes.Comment,
                        createdOnUTC: defaultDateTime.AddHours(1).AddMinutes(25),
                        updatedOnUTC: defaultDateTime.AddHours(1).AddMinutes(25)

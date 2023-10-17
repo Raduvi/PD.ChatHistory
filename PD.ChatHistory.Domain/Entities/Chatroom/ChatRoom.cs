@@ -89,22 +89,22 @@ namespace PD.ChatHistory.Domain.Entities.Chatroom
 
                 if (enters > 0)
                 {
-                    stringBuilder.Append($"{enters} {SingularOrPlurar(enters)} entered \n");
+                    stringBuilder.Append($"{enters} {SingularOrPlurar(enters)} entered ");
                 }
 
                 if (leaves > 0)
                 {
-                    stringBuilder.Append($"{leaves} left \n");
+                    stringBuilder.Append($"{leaves} left ");
                 }
 
                 if (peopleWhomHighFived > 0)
                 {
-                    stringBuilder.Append($"{peopleWhomHighFived} {SingularOrPlurar(peopleWhomHighFived)} high-fived {highFivedPeople} other {SingularOrPlurar(highFivedPeople)} \n");
+                    stringBuilder.Append($"{peopleWhomHighFived} {SingularOrPlurar(peopleWhomHighFived)} high-fived {highFivedPeople} other {SingularOrPlurar(highFivedPeople)} ");
                 }
 
                 if (peopleWhomHighFived > 0)
                 {
-                    stringBuilder.Append($"{comments} comments \n");
+                    stringBuilder.Append($"{comments} comments");
                 }
 
 

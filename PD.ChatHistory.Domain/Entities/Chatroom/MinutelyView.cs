@@ -4,11 +4,11 @@
     {
         public MinutelyView(DateTime dateTime, string comment)
         {
-            DateInfo = dateTime;
+            DateInfo = dateTime.TimeOfDay;
             Comment = comment;
         }
 
-        public DateTime DateInfo { get; private set; }
+        public TimeSpan DateInfo { get; private set; }
 
         public string Comment { get; private set; } = string.Empty;
     }

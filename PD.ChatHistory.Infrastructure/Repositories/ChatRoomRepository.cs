@@ -16,13 +16,12 @@ namespace PD.ChatHistory.Infrastructure.Repositories
 
         public async Task<ChatRoom> Get(int roomId, DateTime day, CancellationToken cancellationToken)
         {
-            DateTime dayUTC = day.ToUniversalTime();
             var room = await _context.ChatRooms
                            .Where(r => r.Id == roomId)
                            .Include(r => r.Events)
                            .ThenInclude(r => r.ChatUser)
                            .Include(r => r.Events
-                                .Where(e => e.CreatedOnUTC.ToShortDateString() == dayUTC.ToShortDateString())
+                                .Where(e => e.CreatedOnUTC.ToShortDateString() == day.ToShortDateString())
                                 .OrderByDescending(e => e.CreatedOnUTC))
                            .ThenInclude(r => r.HighFivedChatUser)
                            .FirstOrDefaultAsync();

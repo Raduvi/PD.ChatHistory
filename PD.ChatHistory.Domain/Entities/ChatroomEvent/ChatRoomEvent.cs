@@ -8,12 +8,12 @@ namespace PD.ChatHistory.Domain.Entities.ChatroomEvent
 {
     public class ChatRoomEvent : Entity
     {
-        public ChatRoom? Chatroom { get; private set; }
+        public ChatRoom Chatroom { get; private set; }
 
         [MaxLength(450)]
         public string Comment { get; private set; } = string.Empty;
 
-        public ChatUser? ChatUser { get; private set; }
+        public ChatUser ChatUser { get; private set; }
 
         public ChatUser? HighFivedChatUser { get; private set; }
 

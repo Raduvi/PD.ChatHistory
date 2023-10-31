@@ -16,7 +16,7 @@ namespace PD.ChatHistory.Api.UnitTests
         #region GetAll
 
         [Fact]
-        public void GetAll_WhenIsValid_ShouldReturnOkEmptyListOfRooms()
+        public async Task GetAllAsync_WhenIsValid_ShouldReturnOkEmptyListOfRooms()
         {
             // Arrange
             var _chatRoomsFromService = new List<ChatRoomDTO>() { };
@@ -28,17 +28,17 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = controller.GetAll(CancellationToken.None);
+            var taskResult = await controller.GetAll(CancellationToken.None);
 
             // Assert            
-            Assert.IsType<OkObjectResult>(taskResult.Result.Result);
-            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result.Result);
+            Assert.IsType<OkObjectResult>(taskResult.Result);
+            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result);
             var resultList = Assert.IsAssignableFrom<List<ChatRoomDTO>>(okResult.Value);
             Assert.Empty(resultList);
         }
 
         [Fact]
-        public void GetAll_WhenIsValid_ShouldReturnOkListOfRooms()
+        public async Task GetAll_WhenIsValid_ShouldReturnOkListOfRooms()
         {
             // Arrange
             var _chatRoomsFromService = new List<ChatRoomDTO>() { Constants.chatRoomDTO };
@@ -50,11 +50,11 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = controller.GetAll(CancellationToken.None);
+            var taskResult = await controller.GetAll(CancellationToken.None);
 
             // Assert            
-            Assert.IsType<OkObjectResult>(taskResult.Result.Result);
-            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result.Result);
+            Assert.IsType<OkObjectResult>(taskResult.Result);
+            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result);
             var resultList = Assert.IsAssignableFrom<List<ChatRoomDTO>>(okResult.Value);
             Assert.NotEmpty(resultList);
             Assert.Equal(_chatRoomsFromService, resultList);
@@ -65,7 +65,7 @@ namespace PD.ChatHistory.Api.UnitTests
         #region Get
 
         [Fact]
-        public void Get_WhenIdDoesNotExist_ShouldReturnNotFound()
+        public async Task Get_WhenIdDoesNotExist_ShouldReturnNotFound()
         {
             // Arrange
             var _chatRoomFromService = new ChatRoomDTO();
@@ -77,14 +77,14 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = controller.Get(Constants.NonExistingRoomId, Constants.DefaultDatetime, CancellationToken.None);
+            var taskResult = await controller.Get(Constants.NonExistingRoomId, Constants.DefaultDatetime, CancellationToken.None);
 
             // Assert            
-            Assert.IsType<NotFoundResult>(taskResult.Result.Result);
+            Assert.IsType<NotFoundResult>(taskResult.Result);
         }
 
         [Fact]
-        public void Get_WhenValid_ShouldReturnChatRoomDTO()
+        public async Task Get_WhenValid_ShouldReturnChatRoomDTO()
         {
             // Arrange
             var _chatRoomFromService = Constants.chatRoomDTO;
@@ -96,11 +96,11 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = controller.Get(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None);
+            var taskResult = await controller.Get(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None);
 
             // Assert            
-            Assert.IsType<OkObjectResult>(taskResult.Result.Result);
-            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result.Result);
+            Assert.IsType<OkObjectResult>(taskResult.Result);
+            var okResult = Assert.IsType<OkObjectResult>(taskResult.Result);
             var resultRoom = Assert.IsAssignableFrom<ChatRoomDTO>(okResult.Value);
             Assert.Equal(Constants.RoomName, resultRoom.Name);
         }

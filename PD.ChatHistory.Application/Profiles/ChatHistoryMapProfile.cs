@@ -8,7 +8,7 @@ namespace PD.ChatHistory.Application.Profiles
     {
         public ChatHistoryMapProfile()
         {
-            CreateMap<ChatRoom, ChatRoomDTO>().ReverseMap();
+            CreateMap<ChatRoom, ChatRoomDTO>();
         }
     }
 }

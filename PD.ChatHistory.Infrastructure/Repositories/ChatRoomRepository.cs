@@ -18,11 +18,11 @@ namespace PD.ChatHistory.Infrastructure.Repositories
         {
             var room = await _context.ChatRooms
                            .Where(r => r.Id == roomId)
-                           .Include(r => r.Events)
+                                .Include(r => r.Events
+                            .Where(e => e.CreatedOnUTC.ToShortDateString() == day.ToShortDateString())
+                            .OrderByDescending(e => e.CreatedOnUTC))
                            .ThenInclude(r => r.ChatUser)
-                           .Include(r => r.Events
-                                .Where(e => e.CreatedOnUTC.ToShortDateString() == day.ToShortDateString())
-                                .OrderByDescending(e => e.CreatedOnUTC))
+                            .Include(r => r.Events)
                            .ThenInclude(r => r.HighFivedChatUser)
                            .FirstOrDefaultAsync();
 

@@ -40,21 +40,11 @@ namespace PD.ChatHistory.Domain.Entities.Chatroom
 
         public List<MinutelyView> GetMinutely()
         {
-            if (this == null)
-            {
-                throw new ArgumentNullException();
-            };
-
             return this.Events.Select(e => new MinutelyView(e.CreatedOnUTC.ToLocalTime(), e.Comment)).ToList();
         }
 
         public List<HourlyView> GetHourly()
         {
-            if (this == null)
-            {
-                throw new ArgumentNullException();
-            };
-
             var hourlyView = new List<HourlyView>();
 
             var groupedEventsByHour = this.Events
@@ -102,7 +92,7 @@ namespace PD.ChatHistory.Domain.Entities.Chatroom
                     stringBuilder.Append($"{peopleWhomHighFived} {SingularOrPlurar(peopleWhomHighFived)} high-fived {highFivedPeople} other {SingularOrPlurar(highFivedPeople)} ");
                 }
 
-                if (peopleWhomHighFived > 0)
+                if (comments > 0)
                 {
                     stringBuilder.Append($"{comments} comments");
                 }

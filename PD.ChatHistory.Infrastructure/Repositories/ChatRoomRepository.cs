@@ -23,14 +23,12 @@ namespace PD.ChatHistory.Infrastructure.Repositories
                            .Include(r => r.Events
                                 .Where(e => e.CreatedOnUTC.Date >= startDate.Date && e.CreatedOnUTC.Date <= endDate.Date)
                                 .OrderByDescending(e => e.CreatedOnUTC))
-                           .ThenInclude(r => r.ChatUser)
+                            .ThenInclude(r => r.ChatUser)
                            .Include(r => r.Events)
                            .ThenInclude(r => r.HighFivedChatUser)
                            .FirstOrDefaultAsync(cancellationToken);
 
-                if (room == null) return new ChatRoom() { };
-
-                return room;
+                return room ?? new ChatRoom();
             }
             catch (OperationCanceledException ex)
             {

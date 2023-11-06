@@ -6,6 +6,8 @@ namespace PD.ChatHistory.Application.Contracts.Services
     {
         Task<List<ChatRoomDTO>> GetRoomsAsync(CancellationToken cancellationToken);
 
-        Task<ChatRoomDTO> GetRoomHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
+        Task<ChatRoomHourDTO> GetRoomHourHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
+
+        Task<ChatRoomMinuteDTO> GetRoomMinuteHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
     }
 }

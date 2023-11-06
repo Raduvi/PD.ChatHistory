@@ -38,67 +38,35 @@ namespace PD.ChatHistory.Domain.Entities.Chatroom
             };
         }
 
-        public List<MinutelyView> GetMinutely()
+        public IEnumerable<MinutelyView> GetMinutely()
         {
             return this.Events.Select(e => new MinutelyView(e.CreatedOnUTC.ToLocalTime(), e.Comment)).ToList();
         }
 
-        public List<HourlyView> GetHourly()
+        public IEnumerable<HourlyView> GetHourly()
+        {
+            var groupedEventsByHour = GroupEventsByHour();
+
+            var hourlyView = CreateHourlyViewFromGroupedEvents(groupedEventsByHour);
+
+            return hourlyView;
+        }
+
+        private IEnumerable<HourlyView> CreateHourlyViewFromGroupedEvents(IEnumerable<IGrouping<int, dynamic>> groupedEventsByHour)
         {
             var hourlyView = new List<HourlyView>();
 
-            var groupedEventsByHour = this.Events
-                .Select(e => new { DateInfo = e.CreatedOnUTC.ToLocalTime(), e.EventType, e.ChatUser, e.HighFivedChatUser })
-                .GroupBy(e => e.DateInfo.Hour).ToList();
-
             foreach (var eventByHour in groupedEventsByHour)
             {
-                var enters = eventByHour
-                    .Where(e => e.EventType == EventTypes.Enter)
-                    .Count();
-                var leaves = eventByHour
-                    .Where(e => e.EventType == EventTypes.Leave)
-                    .Count();
-                var peopleWhomHighFived = eventByHour
-                    .Where(e => e.EventType == EventTypes.HighFive)
-                    .Select(e => e.ChatUser)
-                    .Distinct()
-                    .Count();
-                var highFivedPeople = eventByHour
-                    .Where(e => e.EventType == EventTypes.HighFive)
-                    .Select(e => e.HighFivedChatUser)
-                    .Distinct()
-                    .Count();
-                var comments = eventByHour
-                    .Where(e => e.EventType == EventTypes.Comment)
-                    .Count();
+                var enters = CountEventType(eventByHour, EventTypes.Enter);
+                var leaves = CountEventType(eventByHour, EventTypes.Leave);
+                var peopleWhomHighFived = CountPeopleHighFived(eventByHour);
+                var highFivedPeople = CountHighFivedPeople(eventByHour);
+                var comments = CountEventType(eventByHour, EventTypes.Comment);
 
                 var hour = eventByHour.Key;
 
-                var stringBuilder = new StringBuilder();
-
-                if (enters > 0)
-                {
-                    stringBuilder.Append($"{enters} {SingularOrPlurar(enters)} entered ");
-                }
-
-                if (leaves > 0)
-                {
-                    stringBuilder.Append($"{leaves} left ");
-                }
-
-                if (peopleWhomHighFived > 0)
-                {
-                    stringBuilder.Append($"{peopleWhomHighFived} {SingularOrPlurar(peopleWhomHighFived)} high-fived {highFivedPeople} other {SingularOrPlurar(highFivedPeople)} ");
-                }
-
-                if (comments > 0)
-                {
-                    stringBuilder.Append($"{comments} comments");
-                }
-
-
-                var stats = stringBuilder.ToString();
+                var stats = BuildStatsString(enters, leaves, peopleWhomHighFived, highFivedPeople, comments);
 
                 hourlyView.Add(new HourlyView(hour, stats));
             }
@@ -106,12 +74,68 @@ namespace PD.ChatHistory.Domain.Entities.Chatroom
             return hourlyView;
         }
 
-        private string SingularOrPlurar(int numberOfPeople)
+        private IEnumerable<IGrouping<int, dynamic>> GroupEventsByHour()
         {
-            if (numberOfPeople == 1) return "person";
-            if (numberOfPeople > 1) return "people";
+            return this.Events
+                .Select(e => new { DateInfo = e.CreatedOnUTC.ToLocalTime(), e.EventType, e.ChatUser, e.HighFivedChatUser })
+                .GroupBy(e => e.DateInfo.Hour).ToList();
+        }
 
-            return "person";
+        private int CountEventType(IGrouping<int, dynamic> eventByHour, EventTypes eventType)
+        {
+            return eventByHour
+                .Where(e => e.EventType == eventType)
+                .Count();
+        }
+
+        private int CountPeopleHighFived(IGrouping<int, dynamic> eventByHour)
+        {
+            return eventByHour
+                .Where(e => e.EventType == EventTypes.HighFive)
+                .Select(e => e.ChatUser)
+                .Distinct()
+                .Count();
+        }
+
+        private int CountHighFivedPeople(IGrouping<int, dynamic> eventByHour)
+        {
+            return eventByHour
+                .Where(e => e.EventType == EventTypes.HighFive)
+                .Select(e => e.HighFivedChatUser)
+                .Distinct()
+                .Count();
+        }
+
+        private string BuildStatsString(int enters, int leaves, int peopleWhomHighFived, int highFivedPeople, int comments)
+        {
+            var stringBuilder = new StringBuilder();
+
+            if (enters > 0)
+            {
+                stringBuilder.Append($"{enters} {SingularOrPlural(enters)} entered ");
+            }
+
+            if (leaves > 0)
+            {
+                stringBuilder.Append($"{leaves} left ");
+            }
+
+            if (peopleWhomHighFived > 0)
+            {
+                stringBuilder.Append($"{peopleWhomHighFived} {SingularOrPlural(peopleWhomHighFived)} high-fived {highFivedPeople} other {SingularOrPlural(highFivedPeople)} ");
+            }
+
+            if (comments > 0)
+            {
+                stringBuilder.Append($"{comments} comments");
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private string SingularOrPlural(int count)
+        {
+            return count == 1 ? "person" : "people";
         }
     }
 }

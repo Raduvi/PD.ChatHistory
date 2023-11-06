@@ -17,12 +17,18 @@ namespace PD.ChatHistory.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ChatRoomDTO> GetRoomHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+        public async Task<ChatRoomHourDTO> GetRoomHourHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
         {
             ChatRoom room = await _chatRoomRepo.GetAsync(roomId, startDate, endDate, cancellationToken);
-            ChatRoomDTO roomDTO = _mapper.Map<ChatRoomDTO>(room);
 
-            return roomDTO;
+            return _mapper.Map<ChatRoomHourDTO>(room);
+        }
+
+        public async Task<ChatRoomMinuteDTO> GetRoomMinuteHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
+        {
+            ChatRoom room = await _chatRoomRepo.GetAsync(roomId, startDate, endDate, cancellationToken);
+
+            return _mapper.Map<ChatRoomMinuteDTO>(room);
         }
 
         public async Task<List<ChatRoomDTO>> GetRoomsAsync(CancellationToken cancellationToken = default)

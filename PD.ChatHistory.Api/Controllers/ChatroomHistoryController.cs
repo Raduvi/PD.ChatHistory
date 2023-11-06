@@ -24,21 +24,27 @@ namespace PD.ChatHistory.Api.Controllers
             return Ok(history);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ChatRoomDTO>> GetAsync(int id, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, CancellationToken cancellationToken)
+        [HttpGet("{id}/Minutes")]
+        public async Task<ActionResult<ChatRoomDTO>> GetByMinutesAsync(int id, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, CancellationToken cancellationToken)
         {
             if (startDate > endDate)
             {
                 return BadRequest("startDate cannot be greater than startDate");
             }
 
-            var history = await _chatRoomHistoryService.GetRoomHistoryAsync(id, startDate, endDate, cancellationToken);
+            var history = await _chatRoomHistoryService.GetRoomMinuteHistoryAsync(id, startDate, endDate, cancellationToken);
+            return Ok(history);
+        }
 
-            if (string.IsNullOrEmpty(history.Name))
+        [HttpGet("{id}/Hours")]
+        public async Task<ActionResult<ChatRoomDTO>> GetByHoursAsync(int id, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, CancellationToken cancellationToken)
+        {
+            if (startDate > endDate)
             {
-                return NotFound();
+                return BadRequest("startDate cannot be greater than startDate");
             }
 
+            var history = await _chatRoomHistoryService.GetRoomHourHistoryAsync(id, startDate, endDate, cancellationToken);
             return Ok(history);
         }
     }

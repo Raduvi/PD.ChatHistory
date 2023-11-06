@@ -28,7 +28,7 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = await controller.GetAll(CancellationToken.None);
+            var taskResult = await controller.GetAllAsync(CancellationToken.None);
 
             // Assert            
             Assert.IsType<OkObjectResult>(taskResult.Result);
@@ -50,7 +50,7 @@ namespace PD.ChatHistory.Api.UnitTests
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = await controller.GetAll(CancellationToken.None);
+            var taskResult = await controller.GetAllAsync(CancellationToken.None);
 
             // Assert            
             Assert.IsType<OkObjectResult>(taskResult.Result);

@@ -4,8 +4,8 @@ namespace PD.ChatHistory.Domain.Contracts.Repositories
 {
     public interface IChatRoomRepository
     {
-        Task<ChatRoom> Get(int roomId, DateTime day, CancellationToken cancellationToken);
+        Task<ChatRoom> GetAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
 
-        Task<List<ChatRoom>> GetAll(CancellationToken cancellationToken);
+        Task<List<ChatRoom>> GetAllAsync(CancellationToken cancellationToken);
     }
 }

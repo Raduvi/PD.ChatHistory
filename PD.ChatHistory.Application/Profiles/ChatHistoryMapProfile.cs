@@ -8,7 +8,9 @@ namespace PD.ChatHistory.Application.Profiles
     {
         public ChatHistoryMapProfile()
         {
-            CreateMap<ChatRoom, ChatRoomDTO>();
+            CreateMap<ChatRoom, ChatRoomDTO>()
+              .ForMember(dest => dest.MinutelyView, opt => opt.MapFrom(src => src.GetMinutely()))
+              .ForMember(dest => dest.HourlyView, opt => opt.MapFrom(src => src.GetHourly()));
         }
     }
 }

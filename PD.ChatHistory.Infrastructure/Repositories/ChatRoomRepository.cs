@@ -14,15 +14,15 @@ namespace PD.ChatHistory.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<ChatRoom> Get(int roomId, DateTime day, CancellationToken cancellationToken)
+        public async Task<ChatRoom> GetAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
         {
             var room = await _context.ChatRooms
                            .Where(r => r.Id == roomId)
-                                .Include(r => r.Events
-                            .Where(e => e.CreatedOnUTC.ToShortDateString() == day.ToShortDateString())
-                            .OrderByDescending(e => e.CreatedOnUTC))
+                           .Include(r => r.Events
+                                .Where(e => e.CreatedOnUTC.Date >= startDate.Date && e.CreatedOnUTC.Date <= endDate.Date)
+                                .OrderByDescending(e => e.CreatedOnUTC))
                            .ThenInclude(r => r.ChatUser)
-                            .Include(r => r.Events)
+                           .Include(r => r.Events)
                            .ThenInclude(r => r.HighFivedChatUser)
                            .FirstOrDefaultAsync();
 
@@ -31,7 +31,7 @@ namespace PD.ChatHistory.Infrastructure.Repositories
             return room;
         }
 
-        public async Task<List<ChatRoom>> GetAll(CancellationToken cancellationToken)
+        public async Task<List<ChatRoom>> GetAllAsync(CancellationToken cancellationToken)
         {
             var rooms = await _context.ChatRooms
                          .ToListAsync();

@@ -18,16 +18,21 @@ namespace PD.ChatHistory.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ChatRoomDTO>>> GetAll(CancellationToken cancellationToken)
+        public async Task<ActionResult<List<ChatRoomDTO>>> GetAllAsync(CancellationToken cancellationToken)
         {
             var history = await _chatRoomHistoryService.GetRoomsAsync(cancellationToken);
             return Ok(history);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ChatRoomDTO>> Get(int id, [FromQuery] DateTime day, CancellationToken cancellationToken)
+        public async Task<ActionResult<ChatRoomDTO>> GetAsync(int id, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, CancellationToken cancellationToken)
         {
-            var history = await _chatRoomHistoryService.GetRoomHistoryAsync(id, day, cancellationToken);
+            if (startDate > endDate)
+            {
+                return BadRequest("startDate cannot be greater than startDate");
+            }
+
+            var history = await _chatRoomHistoryService.GetRoomHistoryAsync(id, startDate, endDate, cancellationToken);
 
             if (string.IsNullOrEmpty(history.Name))
             {

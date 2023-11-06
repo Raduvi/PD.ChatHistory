@@ -14,9 +14,11 @@ namespace PD.ChatHistory.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<ChatRoom> GetAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
+        public async Task<ChatRoom> GetAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
         {
-            var room = await _context.ChatRooms
+            try
+            {
+                var room = await _context.ChatRooms
                            .Where(r => r.Id == roomId)
                            .Include(r => r.Events
                                 .Where(e => e.CreatedOnUTC.Date >= startDate.Date && e.CreatedOnUTC.Date <= endDate.Date)
@@ -24,19 +26,31 @@ namespace PD.ChatHistory.Infrastructure.Repositories
                            .ThenInclude(r => r.ChatUser)
                            .Include(r => r.Events)
                            .ThenInclude(r => r.HighFivedChatUser)
-                           .FirstOrDefaultAsync();
+                           .FirstOrDefaultAsync(cancellationToken);
 
-            if (room == null) return new ChatRoom() { };
+                if (room == null) return new ChatRoom() { };
 
-            return room;
+                return room;
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw;
+            }
         }
 
-        public async Task<List<ChatRoom>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<List<ChatRoom>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var rooms = await _context.ChatRooms
+            try
+            {
+                var rooms = await _context.ChatRooms
                          .ToListAsync();
 
-            return rooms;
+                return rooms;
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw;
+            }
         }
     }
 }

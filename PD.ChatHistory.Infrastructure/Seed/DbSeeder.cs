@@ -89,6 +89,22 @@ namespace PD.ChatHistory.Infrastructure.Seed
                        chatUser: chatUserBob,
                        comment: $"{chatUserBob.UserName} enters the room",
                        eventType: EventTypes.Enter,
+                       createdOnUTC: defaultDateTime.AddMinutes(0).AddDays(-1),
+                       updatedOnUTC: defaultDateTime.AddMinutes(0).AddDays(-1)
+                    ),
+                     new ChatRoomEvent().Create(
+                       chatroom: defaultChatRoom,
+                       chatUser: chatUserKate,
+                       comment: $"{chatUserKate.UserName} enters the room",
+                       eventType: EventTypes.Enter,
+                       createdOnUTC: defaultDateTime.AddMinutes(5).AddDays(-1),
+                       updatedOnUTC: defaultDateTime.AddMinutes(5).AddDays(-1)
+                    ),
+                    new ChatRoomEvent().Create(
+                       chatroom: defaultChatRoom,
+                       chatUser: chatUserBob,
+                       comment: $"{chatUserBob.UserName} enters the room",
+                       eventType: EventTypes.Enter,
                        createdOnUTC: defaultDateTime.AddMinutes(0),
                        updatedOnUTC: defaultDateTime.AddMinutes(0)
                     ),

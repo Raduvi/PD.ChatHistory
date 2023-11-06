@@ -17,7 +17,7 @@ namespace PD.ChatHistory.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ChatRoomDTO> GetRoomHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
+        public async Task<ChatRoomDTO> GetRoomHistoryAsync(int roomId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
         {
             ChatRoom room = await _chatRoomRepo.GetAsync(roomId, startDate, endDate, cancellationToken);
             ChatRoomDTO roomDTO = _mapper.Map<ChatRoomDTO>(room);
@@ -25,7 +25,7 @@ namespace PD.ChatHistory.Application.Services
             return roomDTO;
         }
 
-        public async Task<List<ChatRoomDTO>> GetRoomsAsync(CancellationToken cancellationToken)
+        public async Task<List<ChatRoomDTO>> GetRoomsAsync(CancellationToken cancellationToken = default)
         {
             var rooms = await _chatRoomRepo.GetAllAsync(cancellationToken);
 

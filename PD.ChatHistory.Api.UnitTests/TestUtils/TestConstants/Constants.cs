@@ -16,10 +16,18 @@ namespace PD.ChatHistory.Api.UnitTests.TestUtils.Constants
         {
             Name = Constants.RoomName,
             Description = Constants.Description,
+        };
+
+        public static ChatRoomHourDTO chatRoomHourDTO = new ChatRoomHourDTO()
+        {
             HourlyView = new List<HourlyView>()
             {
                 new HourlyView(12, "comments: 12"),
             },
+        };
+
+        public static ChatRoomMinuteDTO chatRoomMinuteDTO = new ChatRoomMinuteDTO()
+        {
             MinutelyView = new List<MinutelyView>()
             {
                 new MinutelyView(DateTime.Now, "comment: test"),

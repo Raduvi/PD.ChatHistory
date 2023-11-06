@@ -11,7 +11,6 @@ For get by id and date, use the current date to get populated entries under the 
 # POSSIBLE FUTURE NEEDS, LIMITATIONS
 
 # Maybe caching the returned history data for a generic interval would be helpful
-# To Add unit tests to Application Layer
 # To Add integration tests for all layers
 # Logger should be added
 # No fluent validations added - Some annotations are added should be convert to fluent validations for application layer

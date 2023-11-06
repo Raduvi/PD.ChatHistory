@@ -13,7 +13,7 @@ namespace PD.ChatHistory.Api.UnitTests
         Mock<IChatRoomHistoryService> _mockService = new Mock<IChatRoomHistoryService>();
         Mock<ILogger<ChatroomHistoryController>> _mockLogger = new Mock<ILogger<ChatroomHistoryController>>();
 
-        #region GetAll
+        #region GetAllAsync
 
         [Fact]
         public async Task GetAllAsync_WhenIsValid_ShouldReturnOkEmptyListOfRooms()
@@ -62,47 +62,28 @@ namespace PD.ChatHistory.Api.UnitTests
 
         #endregion
 
-        #region Get
-
-        [Fact]
-        public async Task Get_WhenIdDoesNotExist_ShouldReturnNotFound()
-        {
-            // Arrange
-            var _chatRoomFromService = new ChatRoomDTO();
-
-            _mockService
-                .Setup(r => r.GetRoomHistoryAsync(Constants.NonExistingRoomId, Constants.DefaultDatetime, CancellationToken.None))
-                .ReturnsAsync(_chatRoomFromService);
-
-            var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
-
-            // Act
-            var taskResult = await controller.Get(Constants.NonExistingRoomId, Constants.DefaultDatetime, CancellationToken.None);
-
-            // Assert            
-            Assert.IsType<NotFoundResult>(taskResult.Result);
-        }
+        #region GetMinutesAsync
 
         [Fact]
         public async Task Get_WhenValid_ShouldReturnChatRoomDTO()
         {
             // Arrange
-            var _chatRoomFromService = Constants.chatRoomDTO;
+            var _chatRoomFromService = Constants.chatRoomMinuteDTO;
 
             _mockService
-                .Setup(r => r.GetRoomHistoryAsync(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None))
+                .Setup(r => r.GetRoomMinuteHistoryAsync(Constants.ValidRoomId, Constants.DefaultDatetime, Constants.DefaultDatetime, CancellationToken.None))
                 .ReturnsAsync(_chatRoomFromService);
 
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = await controller.Get(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None);
+            var taskResult = await controller.GetByMinutesAsync(Constants.ValidRoomId, Constants.DefaultDatetime, Constants.DefaultDatetime, CancellationToken.None);
 
             // Assert            
             Assert.IsType<OkObjectResult>(taskResult.Result);
             var okResult = Assert.IsType<OkObjectResult>(taskResult.Result);
-            var resultRoom = Assert.IsAssignableFrom<ChatRoomDTO>(okResult.Value);
-            Assert.Equal(Constants.RoomName, resultRoom.Name);
+            var resultRoom = Assert.IsAssignableFrom<ChatRoomMinuteDTO>(okResult.Value);
+            Assert.NotEmpty(resultRoom.MinutelyView);
         }
 
         [Fact]
@@ -112,13 +93,13 @@ namespace PD.ChatHistory.Api.UnitTests
             var _chatRoomFromService = Constants.chatRoomDTO;
 
             _mockService
-                .Setup(r => r.GetRoomHistoryAsync(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None))
+                .Setup(r => r.GetRoomMinuteHistoryAsync(Constants.ValidRoomId, Constants.DefaultDatetime, Constants.DefaultDatetime, CancellationToken.None))
                 .Throws(new Exception(Constants.TestExceptionMessage));
 
             var controller = new ChatroomHistoryController(_mockLogger.Object, _mockService.Object);
 
             // Act
-            var taskResult = controller.Get(Constants.ValidRoomId, Constants.DefaultDatetime, CancellationToken.None);
+            var taskResult = controller.GetByMinutesAsync(Constants.ValidRoomId, Constants.DefaultDatetime, Constants.DefaultDatetime, CancellationToken.None);
 
             // Assert            
             Assert.NotNull(taskResult.Exception);
